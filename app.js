@@ -49,17 +49,15 @@ processBtn.addEventListener('click', async () => {
         // 2. เชื่อมต่อไปยัง Hugging Face Space ของคุณ (zixzorash/dub-voice-backend)
         const app = await client("zixzorash/dub-voice-backend");
         
-        statusDisplay.textContent = 'AI กำลังทำการถอดเสียง แยกผู้พูด และโคลนเสียง...';
+        statusDisplay.textContent = 'AI กำลังทำการถอดเสียง แปลภาษา และโคลนเสียง...';
 
-        // 3. เรียกใช้งาน API (ส่งไฟล์, ภาษาต้นฉบับ, ภาษาเป้าหมาย)
+        // 3. เรียกใช้งาน API ตาม Endpoint ของฟังก์ชัน Python
         const result = await app.predict("/process_dubbing", [
             selectedFile, 
             sourceLang, 
             targetLang
         ]);
 
-        // ตรวจสอบและดึง URL ของไฟล์ผลลัพธ์ให้ถูกต้องตามโครงสร้าง Gradio
-        // (โดยปกติไฟล์ผลลัพธ์จาก gr.File จะอยู่ใน result.data[0] หรือมีโครงสร้างเป็น object ที่มี .url)
         let resultFileUrl = "";
         const outputData = result.data[0];
         
@@ -71,6 +69,11 @@ processBtn.addEventListener('click', async () => {
 
         const statusMessage = result.data[1] || "ประมวลผลสำเร็จ";
 
+        // ตรวจสอบความถูกต้องของลิงก์ไฟล์ (ป้องกันการดาวน์โหลดหน้า HTML Error ติดมา)
+        if (!resultFileUrl || resultFileUrl.endsWith('.html')) {
+            throw new Error(statusMessage.includes("Error") ? statusMessage : "เซิร์ฟเวอร์ AI ส่งไฟล์ผลลัพธ์ไม่ถูกต้อง");
+        }
+
         // 5. อัปเดต UI เมื่อสำเร็จ
         statusDisplay.textContent = statusMessage;
         statusDisplay.style.color = '#00FF00'; // สีเขียว
@@ -80,12 +83,10 @@ processBtn.addEventListener('click', async () => {
         downloadBtn.hidden = false;
 
     } catch (error) {
-        // จัดการเมื่อเกิดข้อผิดพลาด
         console.error(error);
         statusDisplay.textContent = 'เกิดข้อผิดพลาดจากเซิร์ฟเวอร์ AI: ' + (error.message || 'เชื่อมต่อล้มเหลว');
         statusDisplay.style.color = 'red';
     } finally {
-        // ไม่ว่าจะสำเร็จหรือล้มเหลว ให้คืนสถานะปุ่มกลับมา
         processBtn.disabled = false;
     }
 });
