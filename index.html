@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DUB&Voice Clone By IDOL_CHAMP</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+    <!-- โหลด FFmpeg.wasm สำหรับจัดการไฟล์ mp4, mp3, m4a, wav บนเครื่องโดยตรง -->
+    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/umd/ffmpeg.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <img src="icon-192.png" alt="Logo" class="logo" onerror="this.src='https://placehold.co/100x100?text=LOGO'">
+            <h1>DUB&Voice Clone</h1>
+            <p>By IDOL_CHAMP</p>
+        </header>
+
+        <main>
+            <div class="upload-section">
+                <label for="mediaFile" class="upload-btn">เลือกไฟล์ (MP4, MP3, M4A, WAV)</label>
+                <input type="file" id="mediaFile" accept=".mp4,.mp3,.m4a,.wav" hidden>
+                <p id="fileName">ยังไม่ได้เลือกไฟล์</p>
+            </div>
+
+            <div class="options-section">
+                <div class="form-group">
+                    <label>ภาษาต้นฉบับ:</label>
+                    <select id="sourceLang">
+                        <option value="ja">Japanese</option>
+                        <option value="en">English</option>
+                        <option value="th">Thai</option>
+                        <option value="zh">Chinese</option>
+                        <option value="ko">Korean</option>
+                        <option value="ru">Russian</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>ภาษาที่ต้องการแปล:</label>
+                    <select id="targetLang">
+                        <option value="th">Thai</option>
+                        <option value="ja">Japanese</option>
+                        <option value="en">English</option>
+                        <option value="zh">Chinese</option>
+                        <option value="ko">Korean</option>
+                        <option value="ru">Russian</option>
+                    </select>
+                </div>
+            </div>
+
+            <button id="processBtn" disabled>เริ่มพากย์เสียงและโคลน (AI)</button>
+            
+            <div id="status"></div>
+            
+            <a id="downloadBtn" hidden>ดาวน์โหลดไฟล์ผลลัพธ์</a>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
