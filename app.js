@@ -58,11 +58,21 @@ processBtn.addEventListener('click', async () => {
             targetLang
         ]);
 
-        // 4. ดึง URL ของไฟล์ผลลัพธ์ที่ฝั่ง Server ส่งกลับมา
-        const resultFileUrl = result.data[0].url;
+        // ตรวจสอบและดึง URL ของไฟล์ผลลัพธ์ให้ถูกต้องตามโครงสร้าง Gradio
+        // (โดยปกติไฟล์ผลลัพธ์จาก gr.File จะอยู่ใน result.data[0] หรือมีโครงสร้างเป็น object ที่มี .url)
+        let resultFileUrl = "";
+        const outputData = result.data[0];
+        
+        if (typeof outputData === 'object' && outputData !== null) {
+            resultFileUrl = outputData.url || outputData.path;
+        } else {
+            resultFileUrl = outputData;
+        }
+
+        const statusMessage = result.data[1] || "ประมวลผลสำเร็จ";
 
         // 5. อัปเดต UI เมื่อสำเร็จ
-        statusDisplay.textContent = 'สำเร็จ! ประมวลผลและโคลนเสียงเรียบร้อย';
+        statusDisplay.textContent = statusMessage;
         statusDisplay.style.color = '#00FF00'; // สีเขียว
         
         downloadBtn.href = resultFileUrl;
