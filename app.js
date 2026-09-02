@@ -52,7 +52,7 @@ processBtn.addEventListener('click', async () => {
         statusDisplay.textContent = 'AI กำลังทำการถอดเสียง แยกผู้พูด และโคลนเสียง...';
 
         // 3. เรียกใช้งาน API (ส่งไฟล์, ภาษาต้นฉบับ, ภาษาเป้าหมาย)
-        const result = await app.predict("/predict", [
+        const result = await app.predict("/process_dubbing", [
             selectedFile, 
             sourceLang, 
             targetLang
